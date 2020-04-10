@@ -20,9 +20,11 @@ Node* createTree(Datatype* array, int* pi){
 		// 创建完根左边一系列的左结点(bc,直到c->left = '#'时, return NULL)后, 再进入下一个递归
 		// 进而创建右节点 c的左右结点都为'#', 证明创建完毕, 返回c结点 证明b的左子树创建完毕 到右子树
 		++(*pi);
+		// 第一个#即为最左边子树的左节点
 		root->_left = createTree(array, pi);
 
 		// 向后移动一个位置, 建立右子树
+		// 第二个#即为最左边子树的右节点
 		++(*pi);
 		root->_right = createTree(array, pi);
 
@@ -40,7 +42,6 @@ Node* createTree(Datatype* array, int* pi){
 // 要访问其右子树 再将右节点入栈
 // 1. 遍历当前结点的最左路径
 // 2. 遍历最后访问的结点的右子树
-
 void preOrderNor(Node* root){
 	Node* cur, *top;
 	Stack st;
@@ -78,8 +79,9 @@ void preOrder(Node* root){
 	}
 }
 
+// 中序遍历 左-根-右
 // 当前结点先压栈, 不能访问, 
-// 让左边访问完(走到NULL)后 再打印根结点, 后再右子树
+// 让左边访问完(走到NULL)后 再打印根结点, 再右子树
 void inOrderNor(Node* root){
 	Node* cur, *top;
 	Stack st;
@@ -92,29 +94,69 @@ void inOrderNor(Node* root){
 			stackPush(&st, cur);
 			cur = cur->_left;
 		}
-		// 获取栈顶元素
+		// top获取栈顶元素
 		top = stackTop(&st);
 		stackPop(&st);
-		// 打印当前结点
-		printf("%c", top->_data);
+		// 再打印当前结点
+		printf("%c ", top->_data);
 		// 然后再访问右子树
-		cur = cur->_right;
+		cur = top->_right;
+	}
+	printf("\n");
+}
+
+void inOrder(Node* root){
+	if (root){
+		inOrder(root->_left);
+		printf("%c ", root->_data);
+		inOrder(root->_right);
 	}
 }
 
-//void postOrderNor(Node* root){
-//	Node* cur, *top;
-//	Stack st;
-//	stackInit(&st, 10);
-//	cur = root;
-//	while (cur || stackEmpty(&st) != 1){
-//		// 从当前根的位置, 一直访问完最左边的路径
-//		while (cur){
-//
-//		}
-//	}
-//}
+// 后序遍历
+// 1. 对应的叶子结点是可以直接访问的
+// 2. 含有右子树的非叶子结点,不能直接出栈
+//   a. 先访问完右子树
+//   b. 才能出栈访问当前非叶子结点
+// 如果判断右子树是否访问完毕(记录前一步结点位置)
+//  设置标记指针, 标记上次访问的结点位置: prev
+//  cur->right == prev; 可以访问cur, 即右子树已访问完
 
+void postOrderNor(Node* root){
+	Node* cur, *top, *prev;
+	Stack st;
+	stackInit(&st, 10);
+	cur = root;
+	prev = NULL;
+	while (cur || stackEmpty(&st) != 1){
+		// 从当前根的位置, 一直访问完最左边的路径
+		while (cur){
+			stackPush(&st, cur);
+			cur = cur->_left;
+		}
+		// 判断当前结点是否可以访问
+		top = stackTop(&st);
+		// 如果没有右子树 或者右子树已经访问完毕
+		if (top->_right == NULL || top->_right == prev){
+			// 可以访问当前节点
+			printf("%c ", top->_data);
+			stackPop(&st);
+			prev = top;
+		}
+		// 当前栈顶元素还有右子树没有访问完, 先访问右子树
+		else
+			cur = top->_right;
+	}
+	printf("\n");
+}
+
+void postOrder(Node* root){
+	if (root){
+		postOrder(root->_left);
+		postOrder(root->_right);
+		printf("%c ", root->_data);
+	}
+}
 // 先进先出 用队列 
 // 只要孩子存在 就可以出栈, 等把所有的孩子遍历完后 
 // 让当前结点带出孩子节点, 在上层结点未访问完之前, 下层结点是访问不到的,
