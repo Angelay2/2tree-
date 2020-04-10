@@ -5,9 +5,15 @@ void test(){
 	int i = 0;
 	//Node* ret;
 	Node* root = createTree(str, &i);
-	preOrderNor(root);
-	preOrder(root);
-	leverOrder(root);
+	/*preOrderNor(root);
+	preOrder(root);*/
+
+	/*inOrderNor(root);
+	inOrder(root);*/
+	
+	postOrderNor(root);
+	postOrder(root);
+
 }
 
 //void test3(){
