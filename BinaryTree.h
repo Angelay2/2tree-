@@ -20,6 +20,8 @@ void inOrder(Node* root);
 
 void postOrderNor(Node* root);
 
+void postOrder(Node* root);
+
 void inOrder(Node* root);
 
 void leverOrder(Node* root);
