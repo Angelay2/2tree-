@@ -157,18 +157,23 @@ void postOrder(Node* root){
 		printf("%c ", root->_data);
 	}
 }
+// 层序遍历
 // 先进先出 用队列 
 // 只要孩子存在 就可以出栈, 等把所有的孩子遍历完后 
 // 让当前结点带出孩子节点, 在上层结点未访问完之前, 下层结点是访问不到的,
+// 先让首元素入队列 父出左右孩子进
 void leverOrder(Node* root){
+	//用队列的出队顺序模拟层序遍历的顺序
 	Queue q;
 	queueInit(&q);
 	if (root)
 		queuePush(&q, root);
-	while (queueEmpty(&q) != 1){
+	while (queueEmpty(&q) != 1){ 
+		// 获取队头元素
 		Node* cur = queueFront(&q);
 		queuePop(&q);
 		printf("%c ", cur->_data);
+		// 孩子入队
 		if (cur->_left)
 			queuePush(&q, cur->_left);
 		if (cur->_right)
