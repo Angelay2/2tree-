@@ -1,8 +1,9 @@
 #pragma once
+#include "common.h"
 #include <stdio.h>
 // 带有尾指针的单链表实现队列
 
-typedef int QDatatype;
+typedef Node* QDatatype;
 // 定义结点
 typedef struct QNode{
 	struct QNode* _next;
